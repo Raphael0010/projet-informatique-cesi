@@ -79,7 +79,14 @@ const Home: React.FC = () => {
     <>
       <div className="terminal">
         <div className="history">
-          <code>{historique.map((m, k) => m.cmd + " - " + m.result)}</code>
+          <code>
+            {historique.map((m, k) => (
+              <>
+                <strong>{m.cmd}</strong> {" - " + m.result}
+                <br />
+              </>
+            ))}
+          </code>
         </div>
         <Input
           onKeyDown={sendCommandEnter}
@@ -92,7 +99,7 @@ const Home: React.FC = () => {
           Send
         </Button>
       </div>
-      <h3>Pwd actualy : {pwd}</h3>
+      <h3 className="center">{pwd}</h3>
       <h2>Commande Line Result :</h2>
       <pre>{commandLineReturn}</pre>
     </>
