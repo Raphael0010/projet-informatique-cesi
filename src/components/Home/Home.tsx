@@ -77,6 +77,7 @@ const Home: React.FC = () => {
 
   return (
     <>
+      <h1 className="center">Terminal</h1>
       <div className="terminal">
         <div className="history">
           <code>
