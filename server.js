@@ -9,13 +9,11 @@ io.on("connection", (socket) => {
         console.log("Handling request : " + cmd);
         exec(cmd, (error, stdout, stderr) => {
             if (error) {
-                socket.emit("error", error);
-                console.log("Error : ", error);
+                socket.emit("cmd return","wrongcmd");
                 return;
             }
             socket.emit("cmd return",stdout);
-          });
-
+        });
     })
 })
 console.log("Server listening on port 3030")
