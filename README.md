@@ -1,17 +1,10 @@
 # Projet Informatique 
 
-## Supervision du matériel
+## Terminal en temps réel
 
-
-```bash
-snmp
-```
-
-## Application web
-
-NodeJs
-      
-React 16 Typescript
+Utilisation d'un serveur [express](https://expressjs.com/fr/) + [socket.io](https://socket.io/)
+* NodeJs 10.X
+* React 16.X
 
 ## Groupe
 * Raphael M.
