@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Input, Button, notification, Icon } from "antd";
+import React, { useState } from "react";
+import { Input, notification, Icon } from "antd";
 import socketIOClient from "socket.io-client";
 import { IHistory } from "../../interface/IHistory";
 import "./Terminal.css";
@@ -8,7 +8,6 @@ const Terminal: React.FC = () => {
   const [historique, setHistorique] = useState<IHistory[]>([]);
   const [commandLine, setCommandLine] = useState("");
   const [commandLineReturn, setCommandLineReturn] = useState("");
-  const [pwd, setPwd] = useState("");
   const url = "http://127.0.0.1:3030";
 
   const onChangeCommandLine = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,7 +24,7 @@ const Terminal: React.FC = () => {
       openNotification("Veuillez rentrer une commande valide i");
       return;
     }
-    getPwd();
+
     const socket = socketIOClient(url);
     socket.on("cmd return", (c: any) => {
       if (c === "wrongcmd") {
@@ -37,6 +36,7 @@ const Terminal: React.FC = () => {
         { cmd: commandLine, result: c },
         ...historique
       ]);
+      console.log(commandLineReturn);
     });
     socket.on("error", (c: any) => {
       setCommandLineReturn(c);
@@ -44,14 +44,6 @@ const Terminal: React.FC = () => {
     });
     socket.emit("cmd", commandLine);
     setCommandLine("");
-  };
-
-  const getPwd = () => {
-    const socket = socketIOClient(url);
-    socket.on("cmd return", (c: any) => {
-      setPwd(c);
-    });
-    socket.emit("cmd", "pwd");
   };
 
   const sendCommandEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -70,10 +62,6 @@ const Terminal: React.FC = () => {
       description: message
     });
   };
-
-  useEffect(() => {
-    getPwd();
-  }, []);
 
   return (
     <>
