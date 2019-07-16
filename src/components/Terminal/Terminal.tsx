@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Input, notification, Icon } from "antd";
+import React, { useState, useEffect } from "react";
+import { Input, notification, Icon, Spin } from "antd";
 import socketIOClient from "socket.io-client";
 import { IHistory } from "../../interface/IHistory";
 import "./Terminal.css";
@@ -8,6 +8,7 @@ const Terminal: React.FC = () => {
   const [historique, setHistorique] = useState<IHistory[]>([]);
   const [commandLine, setCommandLine] = useState("");
   const [commandLineReturn, setCommandLineReturn] = useState("");
+  const [visibleTermStatut, setVisibleTermStatut] = useState(false);
   const url = "http://127.0.0.1:3030";
 
   const onChangeCommandLine = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,16 +64,55 @@ const Terminal: React.FC = () => {
     });
   };
 
+  const tryConnection = () => {
+    const socket = socketIOClient(url);
+    let data;
+    socket.on("connect_error", (err: any) => {
+      console.log("Trying to reconnect to server ....");
+      data = err;
+      setVisibleTermStatut(false);
+    });
+    if (data) {
+      socket.removeAllListeners();
+      setTimeout(tryConnection, 5000);
+      data = "";
+    }
+    setVisibleTermStatut(true);
+    return true;
+  };
+
+  useEffect(() => {
+    tryConnection();
+  }, []);
+
   return (
     <>
       <div className="terminal">
-        <Input
-          onKeyDown={sendCommandEnter}
-          style={{ width: "100%" }}
-          value={commandLine}
-          onChange={onChangeCommandLine}
-          placeholder=">"
-        />
+        {visibleTermStatut && (
+          <Input
+            onKeyDown={sendCommandEnter}
+            style={{ width: "100%" }}
+            value={commandLine}
+            onChange={onChangeCommandLine}
+            placeholder=">"
+          />
+        )}
+
+        {!visibleTermStatut && (
+          <Spin
+            tip=" 
+          Impossible to connect to the socket.io server ..."
+          >
+            <Input
+              onKeyDown={sendCommandEnter}
+              style={{ width: "100%" }}
+              value={commandLine}
+              onChange={onChangeCommandLine}
+              placeholder=">"
+            />
+          </Spin>
+        )}
+
         <div className="history">
           <code>
             {historique.map((m, k) => (
