@@ -1,32 +1,76 @@
-import React, { useEffect } from "react";
-import { Icon } from "antd";
+import React, { useEffect, useState } from "react";
+import { Icon, Collapse, Card } from "antd";
 import socketIOClient from "socket.io-client";
 import "./Supervision.css";
+import logoRaspi from "../../utils/assets/raspi.png";
+
+const { Panel } = Collapse;
 
 const url = "http://127.0.0.1:3030";
 
 const Supervision: React.FC = () => {
-  const getIp = () => {
+  const [heat, setHeat] = useState("");
+
+  const getRaspHeat = () => {
     const socket = socketIOClient(url);
-    socket.on("cmd return", (c: any) => {
+    socket.emit("raspi_get_temp", () => {});
+    socket.on("raspi_get_temp_return", (c: any) => {
       console.log(c);
     });
-    socket.on("snmp_get_ip_return", (c: any) => {
-      console.log(c);
-    });
+    socket.removeAllListeners();
   };
 
   useEffect(() => {
-    getIp();
+    getRaspHeat();
   }, []);
 
   return (
     <>
+      <div className="title-raspi-super-vision">
+        <h3>
+          <img
+            style={{ marginRight: "0.4%" }}
+            width="15"
+            height="15"
+            alt="raspberry"
+            src={logoRaspi}
+          />
+          Raspberry monitoring
+        </h3>
+      </div>
+      <div className="monitoring-raspi">
+        <Card size="small" title="Monitoring">
+          <div className="monitoring-raspi-bloc">
+            <div className="left-raspi">
+              <p>CPU charge : </p>
+              <p>Memory charge : </p>
+              <p>Uptime : </p>
+            </div>
+            <div className="seconde-bloc-raspi">
+              <p>Disk space :</p>
+              <p>Network interface :</p>
+              <p>Heat :</p>
+            </div>
+          </div>
+        </Card>
+      </div>
       <div className="title-super-vision">
         <h3>
           <Icon className="logo-title-super-vision" type="unordered-list" />
-          Liste des équipements connectés
+          List of equipment
+          <span style={{ color: "green" }}> connected</span> to the network
         </h3>
+      </div>
+      <div className="collection-super-vision">
+        <Collapse>
+          <Panel header="IP : - NAME : " key="1">
+            <Collapse defaultActiveKey="1">
+              <Panel header="Graph" key="1">
+                <p>Graph</p>
+              </Panel>
+            </Collapse>
+          </Panel>
+        </Collapse>
       </div>
     </>
   );
