@@ -13,8 +13,9 @@ const Supervision: React.FC = () => {
 
   const getRaspHeat = () => {
     const socket = socketIOClient(url);
-    socket.emit("raspi_get_temp");
+    socket.emit("raspi_get_temp", "/opt/vc/bin/vcgencmd measure_temp");
     socket.on("raspi_get_temp_return", (c: any) => {
+      console.log(c);
       setHeat(c);
     });
     socket.removeAllListeners();
