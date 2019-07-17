@@ -66,19 +66,12 @@ const Terminal: React.FC = () => {
 
   const tryConnection = () => {
     const socket = socketIOClient(url);
-    let data;
     socket.on("connect_error", (err: any) => {
       console.log("Trying to reconnect to server ....");
-      data = err;
       setVisibleTermStatut(false);
+      return;
     });
-    if (data) {
-      socket.removeAllListeners();
-      setTimeout(tryConnection, 5000);
-      data = "";
-    }
     setVisibleTermStatut(true);
-    return true;
   };
 
   useEffect(() => {
