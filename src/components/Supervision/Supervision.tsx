@@ -13,9 +13,9 @@ const Supervision: React.FC = () => {
 
   const getRaspHeat = () => {
     const socket = socketIOClient(url);
-    socket.emit("raspi_get_temp", () => {});
+    socket.emit("raspi_get_temp");
     socket.on("raspi_get_temp_return", (c: any) => {
-      console.log(c);
+      setHeat(c);
     });
     socket.removeAllListeners();
   };
@@ -49,7 +49,7 @@ const Supervision: React.FC = () => {
             <div className="seconde-bloc-raspi">
               <p>Disk space :</p>
               <p>Network interface :</p>
-              <p>Heat :</p>
+              <p>Heat : {heat}</p>
             </div>
           </div>
         </Card>
