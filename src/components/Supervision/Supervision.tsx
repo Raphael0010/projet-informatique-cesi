@@ -18,7 +18,7 @@ const Supervision: React.FC = () => {
       console.log(c);
       setHeat(c);
     });
-    socket.removeAllListeners();
+    //socket.removeAllListeners();
   };
 
   useEffect(() => {
