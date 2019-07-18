@@ -10,13 +10,19 @@ const Supervision: React.FC = () => {
   const [heat, setHeat] = useState("");
   const [ip, setIp] = useState("");
   const [cpuCharge, setCpuCharge] = useState();
+  const [memoryCharge, setMemoryCharge] = useState();
+  const [disckSpace, setDisckSpace] = useState();
+  const [uptime, setUptime] = useState("");
+  const [intReseaux, setIntReseaux] = useState("");
 
   useEffect(() => {
+    // HEAT
     SocketHandler.emit("raspi_snmp_heat", "/opt/vc/bin/vcgencmd measure_temp");
     SocketHandler.listen("raspi_snmp_heat_return", s => {
       setHeat(s.split("=")[1]);
       return SocketHandler.removeListener("raspi_snmp_heat_return");
     });
+    // IP
     SocketHandler.emit(
       "raspi_snmp_ip",
       "snmpwalk -v 2c -c public localhost iso.3.6.1.2.1.92.1.3.2.1.9.7.100.101.102.97.117.108.116.1.2 -Ov -Oq"
@@ -25,6 +31,7 @@ const Supervision: React.FC = () => {
       setIp(s);
       return SocketHandler.removeListener("raspi_snmp_ip_return");
     });
+    // CPU
     SocketHandler.emit(
       "raspi_snmp_cpu_charge",
       "snmpwalk -v 2c -c public localhost  .1.3.6.1.4.1.2021.11.11.0 -Ov -Oq"
@@ -32,6 +39,24 @@ const Supervision: React.FC = () => {
     SocketHandler.listen("raspi_snmp_cpu_charge_return", s => {
       setCpuCharge(s);
       return SocketHandler.removeListener("raspi_snmp_cpu_charge_return");
+    });
+    // Uptime
+    SocketHandler.emit(
+      "raspi_snmp_uptime",
+      "snmpwalk -v 2c -c public localhost .1.3.6.1.2.1.1.3.0 -Ov -Oq"
+    );
+    SocketHandler.listen("raspi_snmp_uptime_return", s => {
+      setUptime(s);
+      return SocketHandler.removeListener("raspi_snmp_uptime_return");
+    });
+    // Interface Reseau
+    SocketHandler.emit(
+      "raspi_snmp_int",
+      "snmpwalk -v 2c -c public localhost iso.3.6.1.2.1.55.1.5.1.2.2 -Ov -Oq"
+    );
+    SocketHandler.listen("raspi_snmp_int_return", s => {
+      setIntReseaux(s);
+      return SocketHandler.removeListener("raspi_snmp_int_return");
     });
   }, []);
 
@@ -56,17 +81,16 @@ const Supervision: React.FC = () => {
               <p>
                 CPU charge : <Progress percent={cpuCharge} />
               </p>
-
               <p>
-                Memory charge : <Progress percent={cpuCharge} />
+                Memory charge : <Progress percent={memoryCharge} />
               </p>
               <p>
-                Disk space : <Progress percent={cpuCharge} />
+                Disk space : <Progress percent={disckSpace} />
               </p>
             </div>
             <div className="seconde-bloc-raspi">
-              <p>Uptime : </p>
-              <p>Network interface :</p>
+              <p>Uptime : {uptime}</p>
+              <p>Network interface : {intReseaux}</p>
               <p>Heat : {heat}</p>
             </div>
           </div>
