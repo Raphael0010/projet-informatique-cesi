@@ -37,7 +37,7 @@ const Supervision: React.FC = () => {
       "snmpwalk -v 2c -c public localhost  .1.3.6.1.4.1.2021.11.11.0 -Ov -Oq"
     );
     SocketHandler.listen("raspi_snmp_cpu_charge_return", s => {
-      setCpuCharge(s);
+      setCpuCharge(parseInt(s));
       return SocketHandler.removeListener("raspi_snmp_cpu_charge_return");
     });
     // Uptime
