@@ -87,7 +87,7 @@ const Supervision: React.FC = () => {
       "snmpwalk -v 2c -c public localhost  .1.3.6.1.4.1.2021.4.5.0  -Ov -Oq"
     );
     SocketHandler.listen("raspi_snmp_memory_total_return", s => {
-      total_disque = parseInt(s);
+      total_memory = parseInt(s);
       return SocketHandler.removeListener("raspi_snmp_memory_total_return");
     });
     // Memory FREE
