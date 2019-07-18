@@ -14,8 +14,8 @@ const Supervision: React.FC = () => {
     SocketHandler.listen("raspi_snmp_heat_return", s => {
       console.log(s);
       setHeat(s);
+      return SocketHandler.removeAllListeners();
     });
-    //return SocketHandler.removeAllListeners;
   }, []);
 
   return (

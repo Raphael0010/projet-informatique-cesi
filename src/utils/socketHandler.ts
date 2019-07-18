@@ -18,4 +18,8 @@ export class SocketHandler {
   public static removeAllListeners() {
     this.socket.removeAllListeners();
   }
+
+  public static removeListener(listener: string) {
+    this.socket.removeEventListener(listener);
+  }
 }

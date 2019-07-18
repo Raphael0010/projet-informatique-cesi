@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { Input, notification, Icon, Spin } from "antd";
 import { IHistory } from "../../interface/IHistory";
 import { SocketHandler } from "../../utils/socketHandler";
@@ -10,22 +10,12 @@ const Terminal: React.FC = () => {
   const [commandLine, setCommandLine] = useState("");
   const [visibleTermStatut] = useState(false);
 
-  useEffect(() => {
-    SocketHandler.listen("cmd return", s => {
-      console.log("lol", commandLine);
-      if (s !== "wrongcmd") {
-        setHistorique(historique => [
-          { cmd: commandLine, result: s },
-          ...historique
-        ]);
-        setCommandLine("");
-      } else {
-        openNotification("Veuillez rentrer une commande valide !");
-        setCommandLine("");
-      }
+  const openNotification = (message: string) => {
+    notification.open({
+      message: "Notification",
+      description: message
     });
-    //return SocketHandler.removeAllListeners;
-  }, []);
+  };
 
   const onChangeCommandLine = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCommandLine(event.target.value);
@@ -43,6 +33,20 @@ const Terminal: React.FC = () => {
     }
     //New version
     SocketHandler.emit("cmd", commandLine);
+
+    SocketHandler.listen("cmd return", s => {
+      if (s !== "wrongcmd") {
+        setHistorique(historique => [
+          { cmd: commandLine, result: s },
+          ...historique
+        ]);
+        setCommandLine("");
+      } else {
+        openNotification("Veuillez rentrer une commande valide !");
+        setCommandLine("");
+      }
+      SocketHandler.removeListener("cmd return");
+    });
   }, [commandLine]);
 
   const sendCommandEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -53,13 +57,6 @@ const Terminal: React.FC = () => {
       }
       sendCommand();
     }
-  };
-
-  const openNotification = (message: string) => {
-    notification.open({
-      message: "Notification",
-      description: message
-    });
   };
 
   return (
