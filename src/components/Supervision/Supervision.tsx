@@ -156,7 +156,7 @@ const Supervision: React.FC = () => {
       "snmpwalk -v 2c -c public 192.168.137.5 .1.3.6.1.2.1.2.2.1.16  -Ov -Oq"
     );
     SocketHandler.listen("switch_snmp_debit_sortant_return", s => {
-      console.log(s);
+      console.log(s.split("\n"));
       console.log(s.split("\n").reduce((p, c) => p + parseInt(c, 10), 0));
       setDebitSortant(s);
       return SocketHandler.removeListener("switch_snmp_debit_sortant_return");
