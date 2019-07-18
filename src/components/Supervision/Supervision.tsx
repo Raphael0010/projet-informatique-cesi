@@ -11,7 +11,7 @@ const Supervision: React.FC = () => {
 
   useEffect(() => {
     SocketHandler.emit("raspi_snmp_heat", "/opt/vc/bin/vcgencmd measure_temp");
-    SocketHandler.listen("cmd return", s => {
+    SocketHandler.listen("raspi_snmp_heat_return", s => {
       console.log(s);
       setHeat(s);
     });
