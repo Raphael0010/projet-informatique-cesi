@@ -4,6 +4,8 @@ import "./Supervision.css";
 import logoRaspi from "../../utils/assets/raspi.png";
 import burn from "../../utils/assets/burn.png";
 import time from "../../utils/assets/time.png";
+import debitdown from "../../utils/assets/debitdown.png";
+import debitentrant from "../../utils/assets/debitup.png";
 import { SocketHandler } from "../../utils/socketHandler";
 import { toPercen } from "../../utils/index";
 
@@ -18,9 +20,13 @@ const Supervision: React.FC = () => {
   const [disckSpace, setDisckSpace] = useState();
   const [uptime, setUptime] = useState("");
   const [intReseaux, setIntReseaux] = useState("");
+  const [ventilo, setVentilo] = useState();
+  const [debitEntrant, setDebitEntrant] = useState("2");
+  const [debitSortant, setDebitSortant] = useState("2");
 
   useEffect(() => {
     raspiMoni();
+    switchMoni();
   }, []);
 
   const raspiMoni = () => {
@@ -114,18 +120,75 @@ const Supervision: React.FC = () => {
     );
   };
 
-  const swicth = () => {
+  const switchMoni = () => {
     // Name
-    let name;
+    let name: string;
     SocketHandler.emit(
-      "raspi_snmp_ip",
+      "switch_snmp_name",
       "snmpwalk -v 2c -c public 192.168.137.5 1.3.6.1.2.1.1.5.0 -Oq -Ov"
     );
-    SocketHandler.listen("raspi_snmp_ip_return", s => {
+    SocketHandler.listen("switch_snmp_name_return", s => {
       name = s;
-      return SocketHandler.removeListener("raspi_snmp_ip_return");
+      return SocketHandler.removeListener("switch_snmp_name_return");
+    });
+    // Ip
+    SocketHandler.emit(
+      "switch_snmp_ip",
+      "snmpwalk -v 2c -c public 192.168.137.5 1.3.6.1.2.1.4.20.1 -Oq -Ov"
+    );
+    SocketHandler.listen("switch_snmp_ip_return", s => {
+      setHeader("IP : " + s.split("12")[0] + " - NAME" + name);
+      return SocketHandler.removeListener("switch_snmp_ip_return");
+    });
+    // Ventirad
+    SocketHandler.emit(
+      "switch_snmp_ventilo",
+      "snmpwalk -v 2c -c public 192.168.137.5 .1.3.6.1.4.1.9.9.109.1.1.1.1.5.1 -Ov -Oq"
+    );
+    SocketHandler.listen("switch_snmp_ventilo_return", s => {
+      setVentilo(s);
+      return SocketHandler.removeListener("switch_snmp_ventilo_return");
+    });
+    // debit entrant
+    SocketHandler.emit(
+      "switch_snmp_debit_entrant",
+      "snmpwalk -v 2c -c public 192.168.137.5 .1.3.6.1.2.1.2.2.1.10  -Ov -Oq"
+    );
+    SocketHandler.listen("switch_snmp_debit_entrant_return", s => {
+      setDebitEntrant(s);
+      return SocketHandler.removeListener("switch_snmp_debit_entrant_return");
+    });
+    // debit sortant
+    SocketHandler.emit(
+      "switch_snmp_debit_sortant",
+      "snmpwalk -v 2c -c public 192.168.137.5 .1.3.6.1.2.1.2.2.1.16  -Ov -Oq"
+    );
+    SocketHandler.listen("switch_snmp_debit_sortant_return", s => {
+      setDebitSortant(s);
+      return SocketHandler.removeListener("switch_snmp_debit_sortant_return");
+    });
+    // liste interface
+    SocketHandler.emit(
+      "switch_snmp_liste_interface",
+      "snmpwalk -v 2c -c public 192.168.137.5 iso.3.6.1.2.1.31.1.1.1.1 -Ov -Oq"
+    );
+    SocketHandler.listen("switch_snmp_liste_interface_return", s => {
+      console.log("LISTE INTERFACE", s);
+      return SocketHandler.removeListener("switch_snmp_liste_interface_return");
+    });
+    // interface connecté
+    SocketHandler.emit(
+      "switch_snmp_liste_interface_connectee",
+      "snmpwalk -v 2c -c public 192.168.137.5 iso.3.6.1.2.1.31.1.1.1.1 -Ov -Oq"
+    );
+    SocketHandler.listen("switch_snmp_liste_interface_connectee_return", s => {
+      console.log("INTERFACE CONNECTER", s);
+      return SocketHandler.removeListener(
+        "switch_snmp_liste_interface_connectee_return"
+      );
     });
   };
+
   return (
     <>
       <div className="title-raspi-super-vision">
@@ -180,6 +243,13 @@ const Supervision: React.FC = () => {
       <div className="collection-super-vision">
         <Collapse>
           <Panel header={header} key="1">
+            <p>
+              Debit : {debitEntrant}{" "}
+              <img height="15" width="15" src={debitdown} />
+              {" " + debitSortant + " "}{" "}
+              <img height="15" width="15" src={debitentrant} />
+              <span style={{ paddingLeft: "0.3%" }}> Fan : {ventilo} %</span>
+            </p>
             <Collapse defaultActiveKey="1">
               <Panel header="Graph" key="1">
                 <p>Graph</p>
