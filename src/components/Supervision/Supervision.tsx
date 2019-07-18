@@ -21,8 +21,8 @@ const Supervision: React.FC = () => {
   const [uptime, setUptime] = useState("");
   const [intReseaux, setIntReseaux] = useState("");
   const [ventilo, setVentilo] = useState();
-  const [debitEntrant, setDebitEntrant] = useState("2");
-  const [debitSortant, setDebitSortant] = useState("2");
+  const [debitEntrant, setDebitEntrant] = useState();
+  const [debitSortant, setDebitSortant] = useState();
 
   useEffect(() => {
     raspiMoni();
@@ -152,8 +152,7 @@ const Supervision: React.FC = () => {
       console.log(tmp);
       tmp.splice(-1);
       console.log(tmp);
-      console.log(tmp.reduce((p, c) => p + parseInt(c, 10), 0));
-      setDebitEntrant(tmp.toString());
+      setDebitEntrant(tmp.reduce((p, c) => p + parseInt(c, 10), 0));
       return SocketHandler.removeListener("switch_snmp_debit_entrant_return");
     });
     // debit sortant
@@ -167,8 +166,7 @@ const Supervision: React.FC = () => {
       console.log(tmp);
       tmp.splice(-1);
       console.log(tmp);
-      console.log(tmp.reduce((p, c) => p + parseInt(c, 10), 0));
-      setDebitSortant(tmp.toString());
+      setDebitSortant(tmp.reduce((p, c) => p + parseInt(c, 10), 0));
       return SocketHandler.removeListener("switch_snmp_debit_sortant_return");
     });
     // liste interface
