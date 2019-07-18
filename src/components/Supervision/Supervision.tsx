@@ -157,7 +157,12 @@ const Supervision: React.FC = () => {
     );
     SocketHandler.listen("switch_snmp_debit_sortant_return", s => {
       console.log(s.split("\n"));
-      console.log(s.split("\n").reduce((p, c) => p + parseInt(c, 10), 0));
+      console.log(
+        s
+          .split("\n")
+          .splice(-1)
+          .reduce((p, c) => p + parseInt(c, 10), 0)
+      );
       setDebitSortant(s);
       return SocketHandler.removeListener("switch_snmp_debit_sortant_return");
     });
