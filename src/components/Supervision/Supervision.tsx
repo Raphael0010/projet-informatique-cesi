@@ -99,6 +99,14 @@ const Supervision: React.FC = () => {
       setMemoryCharge(toPercen(total_memory, parseInt(s)));
       return SocketHandler.removeListener("raspi_snmp_memory_free_return");
     });
+    console.log(
+      "CPU CHARGE " +
+        cpuCharge +
+        " DISQUE CHARGE : " +
+        disckSpace +
+        " MEMORY CHARGE : " +
+        memoryCharge
+    );
   }, []);
 
   return (
