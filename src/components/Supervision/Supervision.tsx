@@ -134,11 +134,11 @@ const Supervision: React.FC = () => {
     // Ip
     SocketHandler.emit(
       "switch_snmp_ip",
-      "snmpwalk -v 2c -c public 192.168.137.5 1.3.6.1.2.1.4.20.1 -Oq -Ov"
+      "snmpwalk -v 2c -c public 192.168.137.5 1.3.6.1.2.1.4.20.1.1 -Oq -Ov"
     );
     SocketHandler.listen("switch_snmp_ip_return", s => {
       console.log(s);
-      setHeader("IP : " + s.split("12")[0] + " - NAME" + name);
+      setHeader("IP : " + s.split("12")[0] + " - NAME : " + name);
       return SocketHandler.removeListener("switch_snmp_ip_return");
     });
     // Ventirad
