@@ -156,6 +156,12 @@ const Supervision: React.FC = () => {
       "snmpwalk -v 2c -c public 192.168.137.5 .1.3.6.1.2.1.2.2.1.16  -Ov -Oq"
     );
     SocketHandler.listen("switch_snmp_debit_sortant_return", s => {
+      let data = 0;
+      console.log(
+        s.split("\n").map((v: any, k: any) => {
+          data = data + parseInt(v);
+        })
+      );
       setDebitSortant(s);
       return SocketHandler.removeListener("switch_snmp_debit_sortant_return");
     });
@@ -166,12 +172,6 @@ const Supervision: React.FC = () => {
     );
     SocketHandler.listen("switch_snmp_liste_interface_return", s => {
       console.log("LISTE INTERFACE", s);
-      let data = 0;
-      console.log(
-        s.split("\n").map((v: any, k: any) => {
-          data = data + parseInt(v);
-        })
-      );
       return SocketHandler.removeListener("switch_snmp_liste_interface_return");
     });
     // interface connecté
