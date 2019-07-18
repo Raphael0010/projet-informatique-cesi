@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Icon, Collapse, Card, Progress } from "antd";
 import "./Supervision.css";
 import logoRaspi from "../../utils/assets/raspi.png";
+import burn from "../../utils/assets/burn.png";
+import time from "../../utils/assets/time.png";
 import { SocketHandler } from "../../utils/socketHandler";
+import { toPercen } from "../../utils/index";
 
 const { Panel } = Collapse;
 
@@ -58,6 +61,25 @@ const Supervision: React.FC = () => {
       setIntReseaux(s);
       return SocketHandler.removeListener("raspi_snmp_int_return");
     });
+    // Disk Space TOTAL
+    let total_disque = 0;
+    SocketHandler.emit(
+      "raspi_snmp_disk_total",
+      "snmpwalk -v 2c -c public localhost  .1.3.6.1.4.1.2021.4.5.0  -Ov -Oq"
+    );
+    SocketHandler.listen("raspi_snmp_disk_total_return", s => {
+      total_disque = parseInt(s);
+      return SocketHandler.removeListener("raspi_snmp_disk_total_return");
+    });
+    // Disk Space FREE
+    SocketHandler.emit(
+      "raspi_snmp_disk_free",
+      "snmpwalk -v 2c -c public localhost  .1.3.6.1.4.1.2021.4.11.0 -Ov -Oq"
+    );
+    SocketHandler.listen("raspi_snmp_disk_free_return", s => {
+      setDisckSpace(toPercen(total_disque, parseInt(s)));
+      return SocketHandler.removeListener("raspi_snmp_disk_free_return");
+    });
   }, []);
 
   return (
@@ -89,9 +111,17 @@ const Supervision: React.FC = () => {
               </p>
             </div>
             <div className="seconde-bloc-raspi">
-              <p>Uptime : {uptime}</p>
+              <p>
+                Uptime : {uptime}{" "}
+                {uptime && <img height="15" width="15" src={time} />}
+              </p>
               <p>Network interface : {intReseaux}</p>
-              <p>Heat : {heat}</p>
+              <p>
+                Heat : {heat}
+                {parseInt("51") >= 50 && parseInt(heat) > 0 && (
+                  <img height="15" width="15" src={burn} />
+                )}
+              </p>
             </div>
           </div>
         </Card>
