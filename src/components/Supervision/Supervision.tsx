@@ -11,6 +11,7 @@ const { Panel } = Collapse;
 
 const Supervision: React.FC = () => {
   const [heat, setHeat] = useState("");
+  const [header, setHeader] = useState("");
   const [ip, setIp] = useState("");
   const [cpuCharge, setCpuCharge] = useState();
   const [memoryCharge, setMemoryCharge] = useState();
@@ -113,6 +114,18 @@ const Supervision: React.FC = () => {
     );
   };
 
+  const swicth = () => {
+    // Name
+    let name;
+    SocketHandler.emit(
+      "raspi_snmp_ip",
+      "snmpwalk -v 2c -c public 192.168.137.5 1.3.6.1.2.1.1.5.0 -Oq -Ov"
+    );
+    SocketHandler.listen("raspi_snmp_ip_return", s => {
+      name = s;
+      return SocketHandler.removeListener("raspi_snmp_ip_return");
+    });
+  };
   return (
     <>
       <div className="title-raspi-super-vision">
@@ -166,7 +179,7 @@ const Supervision: React.FC = () => {
       </div>
       <div className="collection-super-vision">
         <Collapse>
-          <Panel header="IP : - NAME : " key="1">
+          <Panel header={header} key="1">
             <Collapse defaultActiveKey="1">
               <Panel header="Graph" key="1">
                 <p>Graph</p>
