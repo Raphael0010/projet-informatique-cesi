@@ -145,7 +145,7 @@ const Supervision: React.FC = () => {
               <p>Network interface : {intReseaux}</p>
               <p>
                 Heat : {heat}
-                {parseInt("51") >= 50 && parseInt(heat) > 0 && (
+                {parseInt(heat) >= 52 && parseInt(heat) > 0 && (
                   <img height="15" width="15" src={burn} />
                 )}
               </p>
