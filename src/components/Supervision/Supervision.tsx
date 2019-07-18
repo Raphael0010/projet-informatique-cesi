@@ -110,14 +110,6 @@ const Supervision: React.FC = () => {
       setMemoryCharge(toPercen(total_memory, parseInt(s)));
       return SocketHandler.removeListener("raspi_snmp_memory_free_return");
     });
-    console.log(
-      "CPU CHARGE " +
-        cpuCharge +
-        " DISQUE CHARGE : " +
-        disckSpace +
-        " MEMORY CHARGE : " +
-        memoryCharge
-    );
   };
 
   const switchMoni = () => {
@@ -137,7 +129,6 @@ const Supervision: React.FC = () => {
       "snmpwalk -v 2c -c public 192.168.137.5 1.3.6.1.2.1.4.20.1.1 -Oq -Ov"
     );
     SocketHandler.listen("switch_snmp_ip_return", s => {
-      console.log(s);
       setHeader("IP : " + s.split("12")[0] + " - NAME : " + name);
       return SocketHandler.removeListener("switch_snmp_ip_return");
     });
@@ -175,6 +166,12 @@ const Supervision: React.FC = () => {
     );
     SocketHandler.listen("switch_snmp_liste_interface_return", s => {
       console.log("LISTE INTERFACE", s);
+      let data: any;
+      console.log(
+        s.split(" ").map((v: any, k) => {
+          data = data + v;
+        })
+      );
       return SocketHandler.removeListener("switch_snmp_liste_interface_return");
     });
     // interface connecté
