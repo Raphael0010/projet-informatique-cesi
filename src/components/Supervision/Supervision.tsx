@@ -8,12 +8,28 @@ const { Panel } = Collapse;
 
 const Supervision: React.FC = () => {
   const [heat, setHeat] = useState("");
+  const [ip, setIp] = useState("");
 
   useEffect(() => {
-    SocketHandler.emit("raspi_snmp_heat", "/opt/vc/bin/vcgencmd measure_temp");
-    SocketHandler.listen("raspi_snmp_heat_return", s => {
-      console.log(s);
-      setHeat(s);
+    SocketHandler.emit("raspi_snmp", "/opt/vc/bin/vcgencmd measure_temp");
+    SocketHandler.listen("raspi_snmp_return", s => {
+      setHeat(s.split("=")[1]);
+      return SocketHandler.removeAllListeners();
+    });
+    SocketHandler.emit(
+      "raspi_snmp",
+      "snmpwalk -v 2c -c public localhost iso.3.6.1.2.1.92.1.3.2.1.9.7.100.101.102.97.117.108.116.1.2 -Ov -Oq"
+    );
+    SocketHandler.listen("raspi_snmp_return", s => {
+      setIp(s);
+      return SocketHandler.removeAllListeners();
+    });
+    SocketHandler.emit(
+      "raspi_snmp",
+      "snmpwalk -v 2c -c public localhost  .1.3.6.1.4.1.2021.11.11.0 -Ov -Oq"
+    );
+    SocketHandler.listen("raspi_snmp_return", s => {
+      setIp(s);
       return SocketHandler.removeAllListeners();
     });
   }, []);
@@ -29,7 +45,7 @@ const Supervision: React.FC = () => {
             alt="raspberry"
             src={logoRaspi}
           />
-          Raspberry monitoring
+          Raspberry monitoring {ip}
         </h3>
       </div>
       <div className="monitoring-raspi">
