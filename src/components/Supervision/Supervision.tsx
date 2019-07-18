@@ -160,7 +160,7 @@ const Supervision: React.FC = () => {
       console.log(
         s
           .split("\n")
-          .splice(-1)
+          .slice(-1)
           .reduce((p, c) => p + parseInt(c, 10), 0)
       );
       setDebitSortant(s);
