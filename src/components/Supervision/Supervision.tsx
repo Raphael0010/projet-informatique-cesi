@@ -166,10 +166,10 @@ const Supervision: React.FC = () => {
     );
     SocketHandler.listen("switch_snmp_liste_interface_return", s => {
       console.log("LISTE INTERFACE", s);
-      let data: any;
+      let data = 0;
       console.log(
-        s.split(" ").map((v: any, k) => {
-          data = data + v;
+        s.split(" ").map((v: any, k: any) => {
+          data = data + parseInt(v);
         })
       );
       return SocketHandler.removeListener("switch_snmp_liste_interface_return");
