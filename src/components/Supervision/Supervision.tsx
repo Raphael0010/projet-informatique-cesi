@@ -1,27 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { Icon, Collapse, Card } from "antd";
-import socketIOClient from "socket.io-client";
 import "./Supervision.css";
 import logoRaspi from "../../utils/assets/raspi.png";
+import { SocketHandler } from "../../utils/socketHandler";
 
 const { Panel } = Collapse;
-
-const url = "http://127.0.0.1:3030";
 
 const Supervision: React.FC = () => {
   const [heat, setHeat] = useState("");
 
-  const getRaspHeat = () => {
-    const socket = socketIOClient(url);
-    socket.on("cmd return", (c: any) => {
-      console.log(c);
-      setHeat(c);
-    });
-    socket.emit("cmd", "/opt/vc/bin/vcgencmd measure_temp");
-  };
-
   useEffect(() => {
-    getRaspHeat();
+    SocketHandler.emit("raspi_snmp_heat", "/opt/vc/bin/vcgencmd measure_temp");
+    SocketHandler.listen("cmd return", s => {
+      console.log(s);
+      setHeat(s);
+    });
+    //return SocketHandler.removeAllListeners;
   }, []);
 
   return (
