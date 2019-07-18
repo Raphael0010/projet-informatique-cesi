@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Icon, Collapse, Card } from "antd";
+import { Icon, Collapse, Card, Progress } from "antd";
 import "./Supervision.css";
 import logoRaspi from "../../utils/assets/raspi.png";
 import { SocketHandler } from "../../utils/socketHandler";
@@ -9,7 +9,7 @@ const { Panel } = Collapse;
 const Supervision: React.FC = () => {
   const [heat, setHeat] = useState("");
   const [ip, setIp] = useState("");
-  const [cpuCharge, setCpuCharge] = useState("");
+  const [cpuCharge, setCpuCharge] = useState();
 
   useEffect(() => {
     SocketHandler.emit("raspi_snmp_heat", "/opt/vc/bin/vcgencmd measure_temp");
@@ -53,12 +53,19 @@ const Supervision: React.FC = () => {
         <Card size="small" title="Monitoring">
           <div className="monitoring-raspi-bloc">
             <div className="left-raspi">
-              <p>CPU charge : {cpuCharge}</p>
-              <p>Memory charge : </p>
-              <p>Uptime : </p>
+              <p>
+                CPU charge : <Progress percent={cpuCharge} />
+              </p>
+
+              <p>
+                Memory charge : <Progress percent={cpuCharge} />
+              </p>
+              <p>
+                Disk space : <Progress percent={cpuCharge} />
+              </p>
             </div>
             <div className="seconde-bloc-raspi">
-              <p>Disk space :</p>
+              <p>Uptime : </p>
               <p>Network interface :</p>
               <p>Heat : {heat}</p>
             </div>

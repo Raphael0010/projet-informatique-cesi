@@ -19,7 +19,7 @@
 }
 
 .monitoring-raspi-bloc {
-  display: block;
+  display: flex;
 }
 
 .left-raspi {
@@ -27,5 +27,5 @@
 }
 
 .seconde-bloc-raspi {
-  margin-left: 40%;
+  padding-left: 50%;
 }
