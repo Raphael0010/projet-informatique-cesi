@@ -65,7 +65,7 @@ const Supervision: React.FC = () => {
     let total_disque = 0;
     SocketHandler.emit(
       "raspi_snmp_disk_total",
-      "snmpwalk -v 2c -c public localhost  .1.3.6.1.4.1.2021.4.5.0  -Ov -Oq"
+      "snmpwalk -v 2c -c public localhost  .1.3.6.1.4.1.2021.9.1.6.1 -Ov -Oq"
     );
     SocketHandler.listen("raspi_snmp_disk_total_return", s => {
       total_disque = parseInt(s);
@@ -74,11 +74,30 @@ const Supervision: React.FC = () => {
     // Disk Space FREE
     SocketHandler.emit(
       "raspi_snmp_disk_free",
-      "snmpwalk -v 2c -c public localhost  .1.3.6.1.4.1.2021.4.11.0 -Ov -Oq"
+      "snmpwalk -v2c -c public localhost .1.3.6.1.4.1.2021.9.1.7.1 -Ov -Oq"
     );
     SocketHandler.listen("raspi_snmp_disk_free_return", s => {
       setDisckSpace(toPercen(total_disque, parseInt(s)));
       return SocketHandler.removeListener("raspi_snmp_disk_free_return");
+    });
+    // Memory TOTAL
+    let total_memory = 0;
+    SocketHandler.emit(
+      "raspi_snmp_memory_total",
+      "snmpwalk -v 2c -c public localhost  .1.3.6.1.4.1.2021.4.5.0  -Ov -Oq"
+    );
+    SocketHandler.listen("raspi_snmp_memory_total_return", s => {
+      total_disque = parseInt(s);
+      return SocketHandler.removeListener("raspi_snmp_memory_total_return");
+    });
+    // Memory FREE
+    SocketHandler.emit(
+      "raspi_snmp_memory_free",
+      "snmpwalk -v 2c -c public localhost  .1.3.6.1.4.1.2021.4.11.0 -Ov -Oq"
+    );
+    SocketHandler.listen("raspi_snmp_memory_free_return", s => {
+      setMemoryCharge(toPercen(total_memory, parseInt(s)));
+      return SocketHandler.removeListener("raspi_snmp_memory_free_return");
     });
   }, []);
 
