@@ -19,6 +19,10 @@ const Supervision: React.FC = () => {
   const [intReseaux, setIntReseaux] = useState("");
 
   useEffect(() => {
+    raspiMoni();
+  }, []);
+
+  const raspiMoni = () => {
     // HEAT
     SocketHandler.emit("raspi_snmp_heat", "/opt/vc/bin/vcgencmd measure_temp");
     SocketHandler.listen("raspi_snmp_heat_return", s => {
@@ -107,7 +111,7 @@ const Supervision: React.FC = () => {
         " MEMORY CHARGE : " +
         memoryCharge
     );
-  }, []);
+  };
 
   return (
     <>
@@ -156,7 +160,7 @@ const Supervision: React.FC = () => {
       <div className="title-super-vision">
         <h3>
           <Icon className="logo-title-super-vision" type="unordered-list" />
-          List of equipment
+          List of equipments
           <span style={{ color: "green" }}> connected</span> to the network
         </h3>
       </div>
