@@ -86,10 +86,7 @@ const ConfigCisco: React.FC = () => {
 
   const onShowVlan = () => {
     // Je show les vlan
-    SocketHandler.emit(
-      "switch_config_showVlan",
-      "sudo /script/switch_config_showVlan"
-    );
+    SocketHandler.emit("switch_config_showVlan", "sudo /script/VoirVlan");
     SocketHandler.listen("switch_config_showVlan_return", s => {
       setShowVlan(s);
       return SocketHandler.removeListener("switch_config_showVlan_return");
