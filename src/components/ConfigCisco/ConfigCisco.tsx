@@ -5,9 +5,19 @@ import { Icon, Input, Button } from "antd";
 
 const ConfigCisco: React.FC = () => {
   const [nomSwitch, setNomSwitch] = useState("");
+  const [numVlan, setNumVlan] = useState("");
+  const [nomVlan, setNomVlan] = useState("");
 
   const onChangeSwitchName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNomSwitch(event.target.value);
+  };
+
+  const onChangeNumVlan = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNumVlan(event.target.value);
+  };
+
+  const onChangeNomVlan = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNomVlan(event.target.value);
   };
 
   const changeNameExec = () => {
@@ -15,6 +25,14 @@ const ConfigCisco: React.FC = () => {
     SocketHandler.emit(
       "switch_config_change_name",
       "sudo /script/ChangementNomSwitch " + nomSwitch
+    );
+  };
+
+  const createVlan = () => {
+    // Je creée un vlan
+    SocketHandler.emit(
+      "switch_config_createVlan",
+      "sudo /script/CreationVlan " + numVlan + " " + nomVlan
     );
   };
 
@@ -43,9 +61,17 @@ const ConfigCisco: React.FC = () => {
       </div>
       <br />
       <div>
-        <Input style={{ width: "43.5%" }} placeholder="Numéro de VLAN" />{" "}
-        <Input style={{ width: "43.5%" }} placeholder="Nom du VLAN" />{" "}
-        <Button style={{ width: "10%" }} type="primary">
+        <Input
+          onChange={onChangeNumVlan}
+          style={{ width: "43.5%" }}
+          placeholder="Numéro de VLAN"
+        />{" "}
+        <Input
+          onChange={onChangeNomVlan}
+          style={{ width: "43.5%" }}
+          placeholder="Nom du VLAN"
+        />{" "}
+        <Button onClick={createVlan} style={{ width: "10%" }} type="primary">
           Executer
         </Button>
       </div>
