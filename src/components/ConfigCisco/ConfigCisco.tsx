@@ -10,6 +10,7 @@ const ConfigCisco: React.FC = () => {
   const [turnOn, setTurnOn] = useState("");
   const [turnOff, setTurnOff] = useState("");
   const [deleteVlan, setDeleteVlan] = useState("");
+  const [showVlan, setShowVlan] = useState("");
 
   const onChangeSwitchName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNomSwitch(event.target.value);
@@ -73,6 +74,26 @@ const ConfigCisco: React.FC = () => {
       "switch_config_deleteVlan",
       "sudo /script/SupressionVlan " + deleteVlan
     );
+  };
+
+  const onSaveConfig = () => {
+    // Je save la config
+    SocketHandler.emit(
+      "switch_config_saveConfig",
+      "sudo /script/SauvegardeSwitch"
+    );
+  };
+
+  const onShowVlan = () => {
+    // Je show les vlan
+    SocketHandler.emit(
+      "switch_config_showVlan",
+      "sudo /script/switch_config_showVlan"
+    );
+    SocketHandler.listen("switch_config_showVlan_return", s => {
+      setShowVlan(s);
+      return SocketHandler.removeListener("switch_config_showVlan_return");
+    });
   };
 
   return (
@@ -153,8 +174,14 @@ const ConfigCisco: React.FC = () => {
       </div>
       <br />
       <div>
-        <Button type="primary">Sauvegarder la config du switch</Button>
+        <Button onClick={onSaveConfig} type="primary">
+          Sauvegarder la config du switch
+        </Button>
+        <Button onClick={onShowVlan} type="primary">
+          Afficher les Vlan
+        </Button>
       </div>
+      <div>{showVlan && <pre>{showVlan}</pre>}</div>
     </>
   );
 };
