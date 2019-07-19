@@ -67,6 +67,12 @@ const Terminal: React.FC = () => {
           tip=" 
           Impossible to connect to the socket.io server ..."
         >
+          <div className="title-config">
+            <h3>
+              <Icon type="code" />
+              Terminal
+            </h3>
+          </div>
           <Input
             onKeyDown={sendCommandEnter}
             style={{ width: "100%" }}

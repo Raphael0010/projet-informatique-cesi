@@ -147,11 +147,8 @@ const Supervision: React.FC = () => {
       "snmpwalk -v 2c -c public 192.168.137.5 .1.3.6.1.2.1.2.2.1.10  -Ov -Oq"
     );
     SocketHandler.listen("switch_snmp_debit_entrant_return", s => {
-      console.log(s);
       let tmp = s.split("\n");
-      console.log(tmp);
       tmp.splice(-1);
-      console.log(tmp);
       setDebitEntrant(tmp.reduce((p, c) => p + parseInt(c, 10), 0));
       return SocketHandler.removeListener("switch_snmp_debit_entrant_return");
     });
@@ -161,11 +158,8 @@ const Supervision: React.FC = () => {
       "snmpwalk -v 2c -c public 192.168.137.5 .1.3.6.1.2.1.2.2.1.16  -Ov -Oq"
     );
     SocketHandler.listen("switch_snmp_debit_sortant_return", s => {
-      console.log(s);
       let tmp = s.split("\n");
-      console.log(tmp);
       tmp.splice(-1);
-      console.log(tmp);
       setDebitSortant(tmp.reduce((p, c) => p + parseInt(c, 10), 0));
       return SocketHandler.removeListener("switch_snmp_debit_sortant_return");
     });
@@ -222,13 +216,13 @@ const Supervision: React.FC = () => {
             <div className="seconde-bloc-raspi">
               <p>
                 Uptime : {uptime}{" "}
-                {uptime && <img height="15" width="15" src={time} />}
+                {uptime && <img alt="time" height="15" width="15" src={time} />}
               </p>
               <p>Network interface : {intReseaux}</p>
               <p>
                 Heat : {heat}
                 {parseInt(heat) >= 52 && parseInt(heat) > 0 && (
-                  <img height="15" width="15" src={burn} />
+                  <img alt="heat" height="15" width="15" src={burn} />
                 )}
               </p>
             </div>
@@ -246,11 +240,15 @@ const Supervision: React.FC = () => {
         <Collapse>
           <Panel header={header} key="1">
             <p>
-              Debit : {debitEntrant}{" "}
-              <img height="15" width="15" src={debitdown} />
-              {" " + debitSortant + " "}{" "}
-              <img height="15" width="15" src={debitentrant} />
-              <span style={{ paddingLeft: "0.3%" }}> Fan : {ventilo} %</span>
+              Debit : {debitEntrant / 100}
+              {" ko/s"}
+              <img alt="debitdown" height="15" width="15" src={debitdown} />
+              {" " + debitSortant / 100 + " ko/s "}{" "}
+              <img alt="debitup" height="15" width="15" src={debitentrant} />
+              <span style={{ paddingLeft: "0.3%" }}>
+                {" "}
+                Fan use : {ventilo} %
+              </span>
             </p>
             <Collapse defaultActiveKey="1">
               <Panel header="Graph" key="1">
