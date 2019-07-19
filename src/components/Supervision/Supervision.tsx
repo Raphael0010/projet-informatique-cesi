@@ -192,13 +192,14 @@ const Supervision: React.FC = () => {
   };
 
   const onRefresh = () => {
-    if (refreshStop === 0) {
-      reCallRaspiMoni();
-      reCallSwitchMoni();
-      refreshStop = 1;
-    } else if (refreshStop === 1) {
+    if (refreshStop === 1) {
       refreshStop = 2;
+      return;
     }
+    reCallRaspiMoni();
+    reCallSwitchMoni();
+    refreshStop = 1;
+    return;
   };
 
   const reCallRaspiMoni = () => {
@@ -206,8 +207,9 @@ const Supervision: React.FC = () => {
       console.log("reCallRaspiMoni");
       raspiMoni();
       setTimeout(reCallRaspiMoni, parseInt(timerCount) * 1000);
+    } else if (refreshStop === 2) {
+      return;
     }
-    return;
   };
 
   const reCallSwitchMoni = () => {
@@ -215,8 +217,9 @@ const Supervision: React.FC = () => {
       console.log("reCallSwitchMoni");
       switchMoni();
       setTimeout(reCallSwitchMoni, parseInt(timerCount) * 1000);
+    } else if (refreshStop === 2) {
+      return;
     }
-    return;
   };
 
   return (
