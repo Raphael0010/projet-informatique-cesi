@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Icon, Collapse, Card, Progress, Input } from "antd";
+import { Icon, Collapse, Card, Progress, Input, Button } from "antd";
 import "./Supervision.css";
 import logoRaspi from "../../utils/assets/raspi.png";
 import burn from "../../utils/assets/burn.png";
 import time from "../../utils/assets/time.png";
-import refresh from "../../utils/assets/refresh.png";
 import debitdown from "../../utils/assets/debitdown.png";
 import debitentrant from "../../utils/assets/debitup.png";
 import { SocketHandler } from "../../utils/socketHandler";
@@ -234,12 +233,13 @@ const Supervision: React.FC = () => {
           Raspberry monitoring {ip}
           <span style={{ float: "right", paddingRight: "10%" }}>
             <Input style={{ width: "30%" }} onChange={onChangeTimerCount} />
-            <img
+
+            <Button
               onClick={onRefresh}
-              src={refresh}
-              alt="refresh"
-              width="25"
-              height="25"
+              style={{ marginLeft: "4%" }}
+              type="primary"
+              shape="circle"
+              icon="reload"
             />
           </span>
         </h3>
