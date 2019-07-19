@@ -240,7 +240,7 @@ const Supervision: React.FC = () => {
         <Collapse>
           <Panel header={header} key="1">
             <p>
-              Debit : {debitEntrant / 100}
+              Debit total : {debitEntrant / 100}
               {" ko/s"}
               <img alt="debitdown" height="15" width="15" src={debitdown} />
               {" " + debitSortant / 100 + " ko/s "}{" "}

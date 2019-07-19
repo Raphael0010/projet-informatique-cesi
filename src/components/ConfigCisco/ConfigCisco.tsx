@@ -129,7 +129,7 @@ const ConfigCisco: React.FC = () => {
           placeholder="Nom du VLAN"
         />{" "}
         <Button onClick={createVlan} style={{ width: "12.2%" }} type="primary">
-          Créer
+          Créer / Modifier
         </Button>
       </div>
       <br />
@@ -174,11 +174,18 @@ const ConfigCisco: React.FC = () => {
         <Button onClick={onSaveConfig} type="primary">
           Sauvegarder la config du switch
         </Button>
+        {"  "}
         <Button onClick={onShowVlan} type="primary">
           Afficher les Vlan
         </Button>
       </div>
-      <div>{showVlan && <pre>{showVlan}</pre>}</div>
+      <div>
+        {showVlan && (
+          <pre>
+            <code>{showVlan}</code>
+          </pre>
+        )}
+      </div>
     </>
   );
 };
