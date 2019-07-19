@@ -14,7 +14,7 @@ Le repo du server socket.IO : [ici](https://github.com/Raphael0010/projet-inform
 
 * On met met le contenu du dossier build dans un serveur web     
 ( Apache/Httpd )
-* On clone le [repo server](https://github.com/Raphael0010/projet-informatique-cesi)
+* On clone le [repo server](https://github.com/Raphael0010/projet-informatique-cesi-server)
 * On installe les dépendances avec npm, on fait : ```yarn```
 * On lance le script server.js : ```node server.js```
 
