@@ -106,7 +106,7 @@ const ConfigCisco: React.FC = () => {
         <Input
           style={{ width: "89.5%" }}
           onChange={onChangeSwitchName}
-          placeholder="Switch Name"
+          placeholder="Nom du switch"
         />{" "}
         <Button
           onClick={changeNameExec}
@@ -137,7 +137,7 @@ const ConfigCisco: React.FC = () => {
         <Input
           style={{ width: "89.5%" }}
           onChange={onChangeDeleteVlan}
-          placeholder="Numéro Vlan"
+          placeholder="Numéro VLAN"
         />{" "}
         <Button
           onClick={clickDeleteVlan}
@@ -172,7 +172,7 @@ const ConfigCisco: React.FC = () => {
       <br />
       <div>
         <Button onClick={onSaveConfig} type="primary">
-          Sauvegarder la config du switch
+          Sauvegarder la configuration du switch
         </Button>
         {"  "}
         <Button onClick={onShowVlan} type="primary">

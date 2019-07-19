@@ -9,7 +9,7 @@ const Accueil: React.FC = () => {
         <Icon type="sync" /> Bienvenue sur l'application de monitoring en temps
         réel
       </h1>
-      <h2>Technologies utilisés :</h2>
+      <h2>Technologies utilisées :</h2>
       <h3>
         <Icon type="right" /> Server Socket.IO pour executer les commandes et
         récupérer les données en temps réel
