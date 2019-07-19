@@ -15,7 +15,7 @@ Le repo du server socket.IO : [ici](https://github.com/Raphael0010/projet-inform
 * On met met le contenu du dossier build dans un serveur web     
 ( Apache/Httpd )
 * On clone le [repo server](https://github.com/Raphael0010/projet-informatique-cesi-server)
-* On installe les dépendances avec npm, on fait : ```yarn```
+* On installe les dépendances avec npm, on fait : ```yarn``` ( normalement le dossier node_modules est présent ( erreur de ma pars )))
 * On lance le script server.js : ```node server.js```
 
 ## Compilation
@@ -26,7 +26,7 @@ Si on souhaite recompiler les sources :
 
 ## /!\ Attention
  * Le serveur socket.IO écoute sur le port 3030 de localhost
-* Ne pas oublier d'installer les dépendances ```yarn```
+ * Ne pas oublier d'installer les dépendances ```yarn``` si on souhaite re compiler les sources
 
 ## Groupe
 * Raphael M.
